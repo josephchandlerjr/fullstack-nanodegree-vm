@@ -6,8 +6,8 @@
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
 
-create table players (id serial primary key,
-                      name text);
+create table players (name text,
+                      id serial primary key);
 
 create table record (id integer references players,
                      win integer,
