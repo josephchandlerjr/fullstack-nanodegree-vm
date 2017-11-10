@@ -16,7 +16,7 @@ def deleteMatches():
     """Remove all the match records from the database."""
     conn = connect();
     cur = conn.cursor();
-    cur.execute("delete from matches;")
+    cur.execute("delete from match;")
     conn.close()
 
 
@@ -24,7 +24,7 @@ def deletePlayers():
     """Remove all the player records from the database."""
     conn = connect();
     cur = conn.cursor();
-    cur.execute("delete from players;")
+    cur.execute("delete from player;")
     conn.commit()
     conn.close()
 
@@ -33,7 +33,7 @@ def countPlayers():
     """Returns the number of players currently registered."""
     conn = connect();
     cur = conn.cursor();
-    cur.execute("select count(*) from players;")
+    cur.execute("select count(*) from player;")
     result = cur.fetchone()
     conn.close()
     return result[0]
@@ -52,7 +52,7 @@ def registerPlayer(name):
     name = bleach.clean(name)
     conn = connect();
     cur = conn.cursor();
-    cur.execute("insert into players values (%s)", (name,))
+    cur.execute("insert into player values (%s)", (name,))
     conn.commit()
     conn.close()
    
