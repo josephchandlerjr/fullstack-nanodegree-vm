@@ -83,7 +83,7 @@ def playerStandings():
     cur.execute("""select record.id, player.name, record.win, (record.win + record.loss) as matches
                  from record, player
                  where record.id = player.id
-                 order by matches desc;""")
+                 order by record.win desc;""")
     result = cur.fetchall()
     conn.close()
     return result
@@ -120,7 +120,10 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
-    pass
-    
+    pairings = []
+    standings = playerStandings()
+    for i in range(0,len(standings)-1, 2):
+        pairings = pairings + [(standings[0][0],standings[0][1],standings[1][0],standings[1][1])]
+    return pairings 
 
 
