@@ -17,6 +17,8 @@ def deleteMatches():
     conn = connect();
     cur = conn.cursor();
     cur.execute("delete from match;")
+    cur.execute("update record set win = 0, loss = 0;")
+    conn.commit()
     conn.close()
 
 
@@ -24,6 +26,8 @@ def deletePlayers():
     """Remove all the player records from the database."""
     conn = connect();
     cur = conn.cursor();
+    deleteMatches()
+    cur.execute("delete from record;")
     cur.execute("delete from player;")
     conn.commit()
     conn.close()
@@ -54,6 +58,10 @@ def registerPlayer(name):
     cur = conn.cursor();
     cur.execute("insert into player values (%s)", (name,))
     conn.commit()
+    cur.execute("select max(id) from player;")
+    recently_added_id = cur.fetchall()[0]
+    cur.execute("insert into record values (%s, 0, 0);", (recently_added_id,))
+    conn.commit()
     conn.close()
    
 
@@ -75,7 +83,7 @@ def playerStandings():
     cur.execute("""select record.id, player.name, record.win, (record.win + record.loss) as matches
                  from record, player
                  where record.id = player.id
-                 order by matches;""")
+                 order by matches desc;""")
     result = cur.fetchall()
     conn.close()
     return result
@@ -90,8 +98,11 @@ def reportMatch(winner, loser):
     """
     conn = connect()
     cur = conn.cursor()
-    cur.execute("insert into match values (winner, loser);")
-    cur.commit()
+    cur.execute("insert into match values (%s, %s);", (winner,loser))
+    conn.commit()
+    cur.execute("update record set win = win + 1 where id = %s;", (winner,))
+    cur.execute("update record set loss = loss + 1 where id = %s;", (loser,))
+    conn.commit()
     conn.close()
  
 def swissPairings():
@@ -109,5 +120,7 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+    pass
+    
 
 
