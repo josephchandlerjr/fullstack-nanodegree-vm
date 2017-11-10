@@ -6,15 +6,13 @@
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
 
-create table players (name text,
+create table player (name text,
                       id serial primary key);
 
-create table record (id integer references players,
+create table record (id integer references player,
                      win integer,
                      loss integer); 
 
-create table matches (winner integer references players (id), 
-                      loserinteger references players (id), 
-                      round_num integer,
-                      );
+create table match (winner integer references player (id), 
+                      loser integer references player (id) );
 
