@@ -13,9 +13,8 @@ create table record (id integer references players,
                      win integer,
                      loss integer); 
 
-create table matches (player1 integer references players (id), 
-                      player2 integer references players (id), 
+create table matches (winner integer references players (id), 
+                      loserinteger references players (id), 
                       round_num integer,
-                      winner integer references players (id)
                       );
 
