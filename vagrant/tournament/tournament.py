@@ -80,7 +80,10 @@ def playerStandings():
     """
     conn = connect()
     cur = conn.cursor()
-    cur.execute("""select record.id, player.name, record.win, (record.win + record.loss) as matches
+    cur.execute("""select record.id, 
+                   player.name, 
+                   record.win, 
+                   (record.win + record.loss) as matches
                  from record, player
                  where record.id = player.id
                  order by record.win desc;""")
@@ -99,7 +102,6 @@ def reportMatch(winner, loser):
     conn = connect()
     cur = conn.cursor()
     cur.execute("insert into match values (%s, %s);", (winner,loser))
-    conn.commit()
     cur.execute("update record set win = win + 1 where id = %s;", (winner,))
     cur.execute("update record set loss = loss + 1 where id = %s;", (loser,))
     conn.commit()
